@@ -4,9 +4,17 @@
 
 import NPuzzle as p
 import numpy as np
+import Queue
 
 
-def BreadthFirst(puzzle):
+def BreadthFirst(root):
+	open = Queue(0)
+	open.queue(root)
+	closed = []
+
+	while not open.isEmpty():
+		print "hello"
+	
 	
 		
 
