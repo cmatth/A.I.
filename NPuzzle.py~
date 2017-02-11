@@ -34,5 +34,6 @@ class NPuzzle:
 puzzle = NPuzzle(4)
 puzzle.show()
 puzzle.solved()
+puzzle.show()
 
 
