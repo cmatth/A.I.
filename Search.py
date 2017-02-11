@@ -1,0 +1,13 @@
+# Casey Matthews
+# Artificial Intelligence Spring 2017
+# Search Algorithms
+
+import NPuzzle as p
+import numpy as np
+
+
+def BreadthFirst(puzzle):
+	
+		
+
+		
