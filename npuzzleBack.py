@@ -31,23 +31,33 @@ class NPuzzle:
 		i = int(thing[0])
 		j = int(thing[1])
 
-		#print "%s @ (%s,%s)" %(board[i,j], i, j)
+		print "%s @ (%s,%s)" %(board[i,j], i, j)
 		
 		#Look in all adjacent spaces to find the
 		#next sequential tile
 		for x in range(2, self.size ** 2):
-			'''
-			if   self.left() x == board[ i     ][ j - 1 ]:
+			if   x == board[ i - 1 ][ j - 1 ]:
+				i -= 1
 				j -= 1
+			elif x == board[ i     ][ j - 1 ]:
+				j -= 1
+			elif x == board[ i + 1 ][ j - 1 ]:
+				i += 1
+				j -- 1
 			elif x == board[ i - 1 ][ j     ]:
 				i -= 1
 			elif x == board[ i + 1 ][ j     ]:
 				i += 1
+			elif x == board[ i - 1 ][ j + 1 ]:
+				i -= 1
+				j += 1
 			elif x == board[ i     ][ j + 1 ]:
 				j += 1
+			elif x == board[ i + 1 ][ j + 1 ]:
+				i += 1
+				j += 1
 			else:
-				return False
-			''' 		
+				return False 		
 		return True
 	
 	# Moves the empty space in the indicated direction(if it can), then
@@ -61,28 +71,35 @@ class NPuzzle:
 		new = copy.deepcopy(board)
 		
 		if direction == 'up': 
-			if self.up(i):
+			if i > 0:
 				new[i,j] = new[i-1,j]
 				new[i-1,j] = 0
 				return new
 			else:
 				return -1
 		elif direction == 'left':
-			if self.left(j):
+			if j > 0:
 				new[i,j] = new[i,j-1]
 				new[i,j-1] = 0
 				return new
 			else: 
 				return -1 
 		elif direction == 'down': 
-			if self.down(i):
+			if i < self.size - 1:
 				new[i,j] = new[i+1,j]
 				new[i+1,j] = 0
 				return new
 			else: 
 				return -1
 		elif direction == 'right':
-			if self.right(j):
+			
+			#print new[i,j+1]
+			#print new[i,j]
+			#print self.size
+			#print "boundary", (self.size ** .5) - 1
+
+			if j < self.size - 1:
+				print "inside if"
 				new[i,j] = new[i,j+1]
 				new[i,j+1] = 0
 				return new
@@ -90,36 +107,9 @@ class NPuzzle:
 				return -1 
 		else:
 				return -1
-
-	# These methods verify that requested move is a legal one
-	def up(self, i):
-		if i > 0:
-			return True
-		else:
-			return False
-			
-	def down(self, i):
-		if i < self.size - 1:
-			return True
-		else:
-			return False
-
-	def left(self, j):
-		if j > 0:
-			return True
-		else:
-			return False
-
-	def right(self, j):
-		if j < self.size - 1:
-			return True
-		else:
-			return False
-	#########################################################
-			
 		
 # TESTING MOVEMENT #######################################################################
-if True:
+if False:
 	puzzle = NPuzzle(4)
 	print "Orignal Board:"
 	puzzle.show()
@@ -129,12 +119,12 @@ if True:
 	print puzzle.move('down', puzzle.board)
 	print "RIGHT:"
 	print puzzle.move('right', puzzle.board)
-	print "LEFT:"
+	print "LEFT"
 	print puzzle.move('left', puzzle.board)
 #########################################################################################
 
 # TESTING SOLUTIONS #####################################################################
-if False:
+if True:
 	size = 4
 	puzzle = numpy.arange(size*size)
 	puzzle = puzzle.reshape(size,size)

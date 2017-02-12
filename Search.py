@@ -2,20 +2,20 @@
 # Artificial Intelligence Spring 2017
 # Search Algorithms
 
-import NPuzzle as p
+import NPuzzle
 import numpy as np
 import Queue
 
 
 def BreadthFirst(root):
-	open = Queue(0)
-	open.queue(root)
+	open = Queue.Queue(0) 
+	open.put(root)
 	closed = []
 
-	while not open.isEmpty():
-		print "hello"
-	
-	
-		
+	while not open.empty():
+		state = open.get()
 
-		
+def GraphSearch(config, verifiy, makeChildren, searchAlgorithm):
+	print "stub"
+	
+
