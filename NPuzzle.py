@@ -26,9 +26,68 @@ class NPuzzle:
 		print self.board
 
 	def columns(self, board):
-		#check first column
-		print "stub"
-		
+		solution = True
+
+		for y in range(0, self.size - 1):
+			for x in range(0, self.size - 2):
+				if board[x][y] == board[x+1][y]:
+					solution = True
+				else:
+					if board[x][y] == 0 or board[x-1][y] == 0:
+						solution = True
+					else:
+						solution = False
+						break
+		if solution == True:
+			return True
+		else:
+			solution = True
+			for y in range(0, self.size - 2):
+				for x in range(self.size - 1, 1):
+					if board[x][y] == board[x-1][y]:
+						solution = True
+					else:
+						if board[x][y] == 0 or board[x-1][y] == 0:
+							solution = True
+						else:
+							solution = False
+							break
+		if solution == True:
+			return True
+		else:
+			return False
+
+	def rows(self, board):
+		solution = True
+
+		for y in range(0, self.size - 2):
+			for x in range(0, self.size - 1):
+				if board[y][x] == board[y+1][x]:
+					solution = True
+				else:
+					if board[x][y] == 0 or board[x-1][y] == 0:
+						solution = True
+					else:
+						solution = False
+						break
+		if solution == True:
+			return True
+		else:
+			solution = True
+			for y in range(0, self.size - 2):
+				for x in range(self.size - 1, 1):
+					if board[y][x] == board[y-1][x]:
+						solution = True
+					else:
+						if board[x][y] == 0 or board[x-1][y] == 0:
+							solution = True
+						else:
+							solution = False
+							break
+		if solution == True:
+			return True
+		else:
+			return False		
 
 	def adjacency(self, board):
 		#Starting from the tile containing 1
@@ -65,6 +124,12 @@ class NPuzzle:
 			else:
 				return False
 		return True
+
+	def solved(self, board):
+		if self.adjacency(board) == True or self.rows(board) == True or self.columns(board) == True:
+			return True
+		else:
+			return False
 	
 	# Moves the empty space in the indicated direction(if it can), then
 	# returns the new board state. Returns -1 on unsuccessful move
@@ -156,6 +221,8 @@ if True:
 	puzzle = puzzle.reshape(size,size)
 	print puzzle
 	puz = NPuzzle(4)
-	print puz.adjacency(puzzle)
+	print puz.solved(puzzle)
+	puzzle = numpy.array([1, 4, 7], [2, 5, 8], [3, 6, 0])
+	print puz.solved(puzzle)
 
 
