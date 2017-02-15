@@ -5,197 +5,198 @@
 import numpy
 import copy
 
-class NPuzzle:
-	def __init__(self, size):
-		self.newPuzzle(size)
-		self.size = size
 
-	def newPuzzle(self, size):
-		board = numpy.arange(size*size)
-		numpy.random.shuffle(board)
-		board = board.reshape(size,size)
-		self.board =  board
-		self.size  =  size
+puzzle = 0
+_size = 0
 
-	def reset(self):
-		board = self.board.reshape(self.size*self.size)
-		numpy.random.shuffle(board)
-		self.board = board.reshape(self.size, self.size)
+def newPuzzle(size):
+	board  = numpy.arange(size*size)
+	numpy.random.shuffle(board)
+	board  = board.reshape(size,size)
+	global _size 
+	_size  = size
+	return board
 
-	def show(self):
-		print self.board
+# May no longer need reset()
+def reset():
+	puzzle = puzzle.reshape(_size ** 2)
+	numpy.random.shuffle(puzzle)
+	puzzle = puzzle.reshape(_size, _size)
 
-	def columns(self, board):
-		solution = True
+def show():
+	print puzzle
 
-		for y in range(0, self.size - 1):
-			for x in range(0, self.size - 2):
-				if board[x][y] == board[x+1][y]:
-					solution = True
-				else:
-					if board[x][y] == 0 or board[x-1][y] == 0:
-						solution = True
-					else:
-						solution = False
-						break
-		if solution == True:
-			return True
-		else:
-			solution = True
-			for y in range(0, self.size - 2):
-				for x in range(self.size - 1, 1):
-					if board[x][y] == board[x-1][y]:
-						solution = True
-					else:
-						if board[x][y] == 0 or board[x-1][y] == 0:
-							solution = True
-						else:
-							solution = False
-							break
-		if solution == True:
-			return True
-		else:
-			return False
+def columns(board):
+	solution = True
 
-	def rows(self, board):
-		solution = True
-
-		for y in range(0, self.size - 2):
-			for x in range(0, self.size - 1):
-				if board[y][x] == board[y+1][x]:
-					solution = True
-				else:
-					if board[x][y] == 0 or board[x-1][y] == 0:
-						solution = True
-					else:
-						solution = False
-						break
-		if solution == True:
-			return True
-		else:
-			solution = True
-			for y in range(0, self.size - 2):
-				for x in range(self.size - 1, 1):
-					if board[y][x] == board[y-1][x]:
-						solution = True
-					else:
-						if board[x][y] == 0 or board[x-1][y] == 0:
-							solution = True
-						else:
-							solution = False
-							break
-		if solution == True:
-			return True
-		else:
-			return False		
-
-	def adjacency(self, board):
-		#Starting from the tile containing 1
-		thing =  numpy.where(board == 1)
-		indexLimit = self.size - 1
-		i = int(thing[0])
-		j = int(thing[1])
-		
-		#Look in all adjacent spaces to find the
-		#next sequential tile
-		for x in range(2, self.size ** 2):
-			left  = 'E'
-			right = 'E'
-			above = 'E'
-			below = 'E'
-
-			if i < indexLimit: #can check left of focus
-				below = board[i+1][j]
-			if i > 0:
-				above = board[i-1][j]
-			if j > 0:
-				left  = board[i][j-1]
-			if j < indexLimit:
-				right = board[i][j+1]
-
-			if   x == above:
-				i -= 1
-			elif x == below:
-				i += 1
-			elif x == right:
-				j += 1
-			elif x == left:
-				j -= 1
+	for y in range(0, _size - 1):
+		for x in range(0, _size - 2):
+			if board[x][y] == board[x+1][y]:
+				solution = True
 			else:
-				return False
+				if board[x][y] == 0 or board[x-1][y] == 0:
+					solution = True
+				else:
+					solution = False
+					break
+	if solution == True:
 		return True
+	else:
+		solution = True
+		for y in range(0, _size - 2):
+			for x in range(_size - 1, 1):
+				if board[x][y] == board[x-1][y]:
+					solution = True
+				else:
+					if board[x][y] == 0 or board[x-1][y] == 0:
+						solution = True
+					else:
+						solution = False
+						break
+	if solution == True:
+		return True
+	else:
+		return False
 
-	def solved(self, board):
-		if self.adjacency(board) == True or self.rows(board) == True or self.columns(board) == True:
-			return True
+def rows(board):
+	solution = True
+
+	for y in range(0, _size - 2):
+		for x in range(0, _size - 1):
+			if board[y][x] == board[y+1][x]:
+				solution = True
+			else:
+				if board[x][y] == 0 or board[x-1][y] == 0:
+					solution = True
+				else:
+					solution = False
+					break
+	if solution == True:
+		return True
+	else:
+		solution = True
+		for y in range(0, _size - 2):
+			for x in range(_size - 1, 1):
+				if board[y][x] == board[y-1][x]:
+					solution = True
+				else:
+					if board[x][y] == 0 or board[x-1][y] == 0:
+						solution = True
+					else:
+						solution = False
+						break
+	if solution == True:
+		return True
+	else:
+		return False		
+
+def adjacency(board):
+	#Starting from the tile containing 1
+	thing =  numpy.where(board == 1)
+	indexLimit = _size - 1
+	i = int(thing[0])
+	j = int(thing[1])
+		
+	#Look in all adjacent spaces to find the
+	#next sequential tile
+	for x in range(2, _size ** 2):
+		left  = 'E'
+		right = 'E'
+		above = 'E'
+		below = 'E'
+
+		if i < indexLimit: #can check left of focus
+			below = board[i+1][j]
+		if i > 0:
+			above = board[i-1][j]
+		if j > 0:
+			left  = board[i][j-1]
+		if j < indexLimit:
+			right = board[i][j+1]
+
+		if   x == above:
+			i -= 1
+		elif x == below:
+			i += 1
+		elif x == right:
+			j += 1
+		elif x == left:
+			j -= 1
 		else:
 			return False
+	return True
+
+def solved(board):
+	if adjacency(board) == True or rows(board) == True or columns(board) == True:
+		return True
+	else:
+		return False
 	
 	# Moves the empty space in the indicated direction(if it can), then
 	# returns the new board state. Returns -1 on unsuccessful move
-	def move(self, direction, board):
-		# Nab the indices of the empty space
-		thing =  numpy.where(board == 0)
-		i = int(thing[0])
-		j = int(thing[1])
-		#copy the configuration
-		new = copy.deepcopy(board)
+def move(direction, board):
+	# Nab the indices of the empty space
+	thing =  numpy.where(board == 0)
+	i = int(thing[0])
+	j = int(thing[1])
+	#copy the configuration
+	new = copy.deepcopy(board)
 		
-		if direction == 'up': 
-			if self.up(i):
-				new[i,j] = new[i-1,j]
-				new[i-1,j] = 0
-				return new
-			else:
-				return -1
-		elif direction == 'left':
-			if self.left(j):
-				new[i,j] = new[i,j-1]
-				new[i,j-1] = 0
-				return new
-			else: 
-				return -1 
-		elif direction == 'down': 
-			if self.down(i):
-				new[i,j] = new[i+1,j]
-				new[i+1,j] = 0
-				return new
-			else: 
-				return -1
-		elif direction == 'right':
-			if self.right(j):
-				new[i,j] = new[i,j+1]
-				new[i,j+1] = 0
-				return new
-			else: 
-				return -1 
+	if direction == 'up': 
+		if up(i):
+			new[i,j] = new[i-1,j]
+			new[i-1,j] = 0
+			return new
 		else:
-				return -1
+			return -1
+	elif direction == 'left':
+		if left(j):
+			new[i,j] = new[i,j-1]
+			new[i,j-1] = 0
+			return new
+		else: 
+			return -1 
+	elif direction == 'down': 
+		if down(i):
+			new[i,j] = new[i+1,j]
+			new[i+1,j] = 0
+			return new
+		else: 
+			return -1
+	elif direction == 'right':
+		if right(j):
+			new[i,j] = new[i,j+1]
+			new[i,j+1] = 0
+			return new
+		else: 
+			return -1 
+	else:
+		return -1
 
 	# These methods verify that requested move is a legal one
-	def up(self, i):
-		if i > 0:
-			return True
-		else:
-			return False
+def up(self, i):
+	if i > 0:
+		return True
+	else:
+		return False
 			
-	def down(self, i):
-		if i < self.size - 1:
-			return True
-		else:
-			return False
+def down(i):
+	if i < _size - 1:
+		return True
+	else:
+		return False
 
-	def left(self, j):
-		if j > 0:
-			return True
-		else:
-			return False
+def left(j):
+	if j > 0:
+		return True
+	else:
+		return False
 
-	def right(self, j):
-		if j < self.size - 1:
-			return True
-		else:
-			return False
+def right(j):
+	if j < _size - 1:
+		return True
+	else:
+		return False
 	#########################################################
 			
 		
@@ -215,14 +216,35 @@ if False:
 #########################################################################################
 
 # TESTING SOLUTIONS #####################################################################
-if True:
+if False:
 	size = 4
 	puzzle = numpy.arange(size*size)
 	puzzle = puzzle.reshape(size,size)
 	print puzzle
 	puz = NPuzzle(4)
 	print puz.solved(puzzle)
-	puzzle = numpy.array([1, 4, 7], [2, 5, 8], [3, 6, 0])
+
+	puz = NPuzzle(3)
+	size = 3
+	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])
+	puzzle = puzzle.reshape(size,size)
+	print puzzle
 	print puz.solved(puzzle)
+##########################################################################################
+
+# Testing new puzzle style code ##########################################################
+if True:
+	puzzle = newPuzzle(3)
+	show()
+	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])
+	puzzle = puzzle.reshape(_size,_size)
+	print solved(puzzle)
+
+
+
+
+
+
+
 
 
