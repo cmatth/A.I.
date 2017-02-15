@@ -7,15 +7,17 @@ import copy
 
 
 puzzle = 0
-_size = 0
+_size  = 0
 
 def newPuzzle(size):
 	board  = numpy.arange(size*size)
 	numpy.random.shuffle(board)
 	board  = board.reshape(size,size)
 	global _size 
+	global   puzzle
 	_size  = size
-	return board
+	puzzle = board
+	return   board
 
 # May no longer need reset()
 def reset():
@@ -127,6 +129,7 @@ def adjacency(board):
 	return True
 
 def solved(board):
+	print "verifier"
 	if adjacency(board) == True or rows(board) == True or columns(board) == True:
 		return True
 	else:
@@ -174,7 +177,7 @@ def move(direction, board):
 		return -1
 
 	# These methods verify that requested move is a legal one
-def up(self, i):
+def up(i):
 	if i > 0:
 		return True
 	else:
@@ -197,22 +200,31 @@ def right(j):
 		return True
 	else:
 		return False
+
+def children(board):
+	childs = []
+	childs.append(move("up", board))
+	childs.append(move("down", board))
+	childs.append(move("left", board))
+	childs.append(move("right", board))
+	return childs
+		
 	#########################################################
 			
 		
 # TESTING MOVEMENT #######################################################################
 if False:
-	puzzle = NPuzzle(4)
+	puzzle = newPuzzle(18)
 	print "Orignal Board:"
-	puzzle.show()
+	show()
 	print "UP:"
-	print puzzle.move('up', puzzle.board)
+	print move('up', puzzle)
 	print "DOWN:"
-	print puzzle.move('down', puzzle.board)
+	print move('down', puzzle)
 	print "RIGHT:"
-	print puzzle.move('right', puzzle.board)
+	print move('right', puzzle)
 	print "LEFT:"
-	print puzzle.move('left', puzzle.board)
+	print move('left', puzzle)
 #########################################################################################
 
 # TESTING SOLUTIONS #####################################################################
@@ -233,7 +245,7 @@ if False:
 ##########################################################################################
 
 # Testing new puzzle style code ##########################################################
-if True:
+if False:
 	puzzle = newPuzzle(3)
 	show()
 	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])

@@ -2,20 +2,36 @@
 # Artificial Intelligence Spring 2017
 # Search Algorithms
 
-import NPuzzle
 import numpy as np
 import Queue
 
 
-def BreadthFirst(root):
+def BreadthFirst(root, verifier, children):
 	open = Queue.Queue(0) 
 	open.put(root)
-	closed = []
+	closed   = []
+	solution = False
 
+	print "before"
 	while not open.empty():
 		state = open.get()
+		solution = verifier(state)
+		print "inside"
+		
+		if solution == False:
+			newChil = children(state)
+	
+			for x in newChil:
+				print x
+				if not item in open:
+					open.put(x)
+		else:
+			return [True, state]
+	return [False, "No solution found."]
+			
+		
 
-def GraphSearch(config, verifiy, makeChildren, searchAlgorithm):
-	print "stub"
+def GraphSearch(config, verify, makeChildren, searchAlgorithm):
+	return searchAlgorithm(config, verify, makeChildren)
 	
 
