@@ -4,12 +4,18 @@
 
 import NPuzzle as puz
 import Search
+from subprocess import call
 
+call(["clear"])
 puzzle = puz.newPuzzle(3)
-#puz.show()
 answer = Search.GraphSearch(puzzle, puz.solved, puz.children, Search.BreadthFirst)
+
+print "\n*** NxN Puzzle ***"
+puz.show()
 if answer[0] == True:
-	print "Solution found:\n"
+	print "\nSolution found:"
 	print answer[1]
 else:
 	print "Failed to find answer."
+
+print "\n******************"

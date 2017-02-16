@@ -5,7 +5,13 @@
 import numpy as np
 import Queue
 import NPuzzle as p
+import math
 
+#Module Vars
+space = 0
+
+def GraphSearch(config, verify, makeChildren, searchAlgorithm):
+	return searchAlgorithm(config, verify, makeChildren)
 
 def BreadthFirst(root, verifier, children):
 	Open = [] 
@@ -13,11 +19,18 @@ def BreadthFirst(root, verifier, children):
 	closed   = []
 	solution = False
 	visited = False
+	count = 0 #for progress
+	global space
+	space = float(math.factorial(p._size ** 2))
 
 	while not len(Open) == 0:
 		state = Open[0]
 		Open.remove(state)
 		solution = verifier(state)
+
+		#Progress
+		count += 1
+		Progress(count)
 		
 		if solution == False:
 			closed.append(state)
@@ -41,9 +54,10 @@ def BreadthFirst(root, verifier, children):
 			return [True, state]
 	return [False, "No solution found."]
 			
-		
+def Progress(count):
+	progress = (count / space) * 4000
+	print 'Space Traversed [%d%%]\r'%progress,
 
-def GraphSearch(config, verify, makeChildren, searchAlgorithm):
-	return searchAlgorithm(config, verify, makeChildren)
+
 	
 

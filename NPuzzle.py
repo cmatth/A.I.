@@ -91,7 +91,18 @@ def rows(board):
 				solution
 			else:
 				if board[x][y] == 0 or board[x][y + 1] == 0:
-					solution
+					##### NEW ####################################
+					thing =  numpy.where(board == 0)
+					if thing[1] == 0 or thing[1] == _size - 1:
+						solution
+					else:
+						if board[x][y] == 0:
+							if board[x][y-1] + 1 != board[x][y+1]:
+								solution = False
+						else:
+							if board[x][y] + 1 != board[x][y+2]:
+									solution = False
+					###############################################
 				else:
 					solution = False
 					break
@@ -105,7 +116,18 @@ def rows(board):
 					solution
 				else:
 					if board[x][y] == 0 or board[x][y - 1] == 0:
-						solution
+						##### NEW ####################################
+						thing =  numpy.where(board == 0)
+						if thing[1] == 0 or thing[1] == _size - 1:
+							solution
+						else:
+							if board[x][y] == 0:
+								if board[x][y+1] + 1 != board[x][y-1]:
+									solution = False
+							else:
+								if board[x][y] + 1 != board[x][y-2]:
+										solution = False
+						###############################################
 					else:
 						solution = False
 						break
@@ -152,7 +174,9 @@ def adjacency(board):
 	return True
 
 def solved(board):
-	if adjacency(board) == True or rows(board) == True or columns(board) == True:
+	#if adjacency(board) == True or rows(board) == True or columns(board) == True:
+	if rows(board) == True or columns(board) == True:
+	
 		return True
 	else:
 		return False
