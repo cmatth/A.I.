@@ -4,27 +4,39 @@
 
 import numpy as np
 import Queue
+import NPuzzle as p
 
 
 def BreadthFirst(root, verifier, children):
-	open = Queue.Queue(0) 
-	open.put(root)
+	Open = [] 
+	Open.append(root)
 	closed   = []
 	solution = False
+	visited = False
 
-	print "before"
-	while not open.empty():
-		state = open.get()
+	while not len(Open) == 0:
+		state = Open[0]
+		Open.remove(state)
 		solution = verifier(state)
-		print "inside"
 		
 		if solution == False:
+			closed.append(state)
 			newChil = children(state)
 	
 			for x in newChil:
-				print x
-				if not item in open:
-					open.put(x)
+				if x != -1
+					visited = False
+					for o in Open:
+						if p.compare(x, o):
+							visited = True
+							break
+					if visited == False:
+						for c in closed:
+							if p.compare(x, c):
+								visited = True
+								break
+					if visited == False:
+						Open.append(x)
 		else:
 			return [True, state]
 	return [False, "No solution found."]

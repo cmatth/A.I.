@@ -31,13 +31,13 @@ def show():
 def columns(board):
 	solution = True
 
-	for y in range(0, _size - 1):
-		for x in range(0, _size - 2):
-			if board[x][y] == board[x+1][y]:
-				solution = True
+	for y in range(0, _size):
+		for x in range(0, _size - 1):
+			if board[x][y] + 1 == board[x+1][y]:
+				solution
 			else:
-				if board[x][y] == 0 or board[x-1][y] == 0:
-					solution = True
+				if board[x][y] == 0 or board[x+1][y] == 0:
+					solution
 				else:
 					solution = False
 					break
@@ -45,13 +45,13 @@ def columns(board):
 		return True
 	else:
 		solution = True
-		for y in range(0, _size - 2):
-			for x in range(_size - 1, 1):
-				if board[x][y] == board[x-1][y]:
-					solution = True
+		for y in range(0, _size):
+			for x in reversed(range(1, _size)):
+				if board[x][y] + 1 == board[x-1][y]:
+					solution
 				else:
 					if board[x][y] == 0 or board[x-1][y] == 0:
-						solution = True
+						solution
 					else:
 						solution = False
 						break
@@ -63,13 +63,13 @@ def columns(board):
 def rows(board):
 	solution = True
 
-	for y in range(0, _size - 2):
-		for x in range(0, _size - 1):
-			if board[y][x] == board[y+1][x]:
-				solution = True
+	for x in range(0, _size):
+		for y in range(0, _size - 1):
+			if board[x][y] + 1 == board[x][y+1]:
+				solution
 			else:
-				if board[x][y] == 0 or board[x-1][y] == 0:
-					solution = True
+				if board[x][y] == 0 or board[x][y + 1] == 0:
+					solution
 				else:
 					solution = False
 					break
@@ -77,16 +77,17 @@ def rows(board):
 		return True
 	else:
 		solution = True
-		for y in range(0, _size - 2):
-			for x in range(_size - 1, 1):
-				if board[y][x] == board[y-1][x]:
-					solution = True
+		for x in range(0, _size):
+			for y in reversed(range(1, _size)):
+				if board[x][y] + 1 == board[x][y - 1]:
+					solution
 				else:
-					if board[x][y] == 0 or board[x-1][y] == 0:
-						solution = True
+					if board[x][y] == 0 or board[x][y - 1] == 0:
+						solution
 					else:
 						solution = False
 						break
+						
 	if solution == True:
 		return True
 	else:
@@ -129,7 +130,6 @@ def adjacency(board):
 	return True
 
 def solved(board):
-	print "verifier"
 	if adjacency(board) == True or rows(board) == True or columns(board) == True:
 		return True
 	else:
@@ -203,12 +203,18 @@ def right(j):
 
 def children(board):
 	childs = []
-	childs.append(move("up", board))
-	childs.append(move("down", board))
-	childs.append(move("left", board))
-	childs.append(move("right", board))
+	childs.append(copy.deepcopy(move("up", board)))
+	childs.append(copy.deepcopy(move("down", board)))
+	childs.append(copy.deepcopy(move("left", board)))
+	childs.append(copy.deepcopy(move("right", board)))
 	return childs
-		
+
+def compare(board1, board2):
+	print board1, board2	
+	for x in range(0, _size):
+		for y in range(0, _size):
+			if not board1[x][y] == board2[x][y]:
+				return False
 	#########################################################
 			
 		
@@ -244,13 +250,42 @@ if False:
 	print puz.solved(puzzle)
 ##########################################################################################
 
-# Testing new puzzle style code ##########################################################
+# Testing SOLUTION VERIFIERS ##########################################################
 if False:
+	print "Random:"
 	puzzle = newPuzzle(3)
+	puzzle = puzzle.reshape(_size,_size)
 	show()
+	print "Rows: ", rows(puzzle)
+	print "Columns: ", columns(puzzle)
+
+	print "\nColumn forward: "
 	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])
 	puzzle = puzzle.reshape(_size,_size)
-	print solved(puzzle)
+	show()
+	print "Rows: ", rows(puzzle)
+	print "Columns: ", columns(puzzle)
+
+	print "\nColumn reverse: "
+	puzzle = numpy.array([0, 6, 3, 8, 5, 2, 7, 4, 1])
+	puzzle = puzzle.reshape(_size,_size)
+	show()
+	print "Rows: ", rows(puzzle)
+	print "Columns: ", columns(puzzle)
+
+	print "\nRow forward:"
+	puzzle = numpy.array([1, 2, 3, 4, 5, 6, 7, 8, 0])
+	puzzle = puzzle.reshape(_size,_size)
+	show()
+	print "Rows: ", rows(puzzle)
+	print "Columns: ", columns(puzzle)
+
+	print "\nRow reverse:"
+	puzzle = numpy.array([0, 8, 7, 6, 5, 4, 3, 2, 1])
+	puzzle = puzzle.reshape(_size,_size)
+	show()
+	print "Rows: ", rows(puzzle)
+	print "Columns: ", columns(puzzle)
 
 
 
