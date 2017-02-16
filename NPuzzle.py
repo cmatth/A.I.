@@ -26,7 +26,8 @@ def reset():
 	puzzle = puzzle.reshape(_size, _size)
 
 def show():
-	print puzzle
+	for x in range(0, _size):
+		print puzzle[x]
 
 def columns(board):
 	solution = True
@@ -174,8 +175,8 @@ def adjacency(board):
 	return True
 
 def solved(board):
-	#if adjacency(board) == True or rows(board) == True or columns(board) == True:
-	if rows(board) == True or columns(board) == True:
+	if adjacency(board) == True or rows(board) == True or columns(board) == True:
+	#if rows(board) == True or columns(board) == True:
 	
 		return True
 	else:
@@ -278,23 +279,6 @@ if False:
 	print "LEFT:"
 	print move('left', puzzle)
 #########################################################################################
-
-# TESTING SOLUTIONS #####################################################################
-if False:
-	size = 4
-	puzzle = numpy.arange(size*size)
-	puzzle = puzzle.reshape(size,size)
-	print puzzle
-	puz = NPuzzle(4)
-	print puz.solved(puzzle)
-
-	puz = NPuzzle(3)
-	size = 3
-	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])
-	puzzle = puzzle.reshape(size,size)
-	print puzzle
-	print puz.solved(puzzle)
-##########################################################################################
 
 # Testing SOLUTION VERIFIERS ##########################################################
 if False:

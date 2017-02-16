@@ -55,7 +55,7 @@ def BreadthFirst(root, verifier, children):
 	return [False, "No solution found."]
 			
 def Progress(count):
-	progress = (count / space) * 4000
+	progress = (count / space) * 100
 	print 'Space Traversed [%d%%]\r'%progress,
 
 
