@@ -209,7 +209,8 @@ def children(board):
 	childs.append(copy.deepcopy(move("right", board)))
 	return childs
 
-def compare(board1, board2):	
+def compare(board1, board2):
+	print board1, board2	
 	for x in range(0, _size):
 		for y in range(0, _size):
 			if not board1[x][y] == board2[x][y]:
