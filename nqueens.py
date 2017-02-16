@@ -4,6 +4,7 @@
 # NQueens Module
 
 import numpy as np
+import copy
 
 _size  = 0
 _board = 0
@@ -14,8 +15,8 @@ def newBoard(size):
 	board = np.zeros(size**2)
 	board = board.reshape(size,size)
 
-	for y in range(0, _size):
-		board[0][y] = 1
+	for x in range(0, _size):
+		board[x][0] = 1
 	return board
 
 def solved(board):
@@ -58,11 +59,31 @@ def solved(board):
 		y = np.delete(y, 0)
 
 	return True
-def move(indexOfQueen):
-	board	
+#moves the nth queen once space downward, if possible.
+def move(queenNumber, board):
+	thing =  np.where(board == 1)
+	y = thing[1][queenNumber - 1]
+	x = thing[0][queenNumber - 1]
+	new = copy.deepcopy(board)
+
+	if y < _size - 1:
+		new[x][y] -= 1
+		new[x][y+1] += 1
+		return new
+	else:
+		return False
+
+def getChildren(board):
+	childs = []
+	for q in range(1,_size+1):
+		new = move(q,board)
+		if type(new) is np.ndarray:
+			childs.append(new)
+	return childs
+		
 
 ### TESTING ######################################################
-if True:			
+if False:			
 	board = newBoard(3)
 	thing = np.where(board == 1)
 	print board
@@ -73,4 +94,18 @@ if True:
 	print board
 	_size = 4
 	print solved(board)
+	board =  move(1, board)
+	print move(1, board)
+	print move(1, board)
+
+board = np.array([[0, 0, 1, 0], [1,0,0,0], [0,0,0,1], [0,1,0,0]])
+board = board.reshape(4,4)
+print board
+print "***********"
+_size = 4
+chil = getChildren(board)
+for x in range(0, len(chil)):
+	print chil[x]
+
+
 ##################################################################
