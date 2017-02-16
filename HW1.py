@@ -7,4 +7,9 @@ import Search
 
 puzzle = puz.newPuzzle(3)
 #puz.show()
-print Search.GraphSearch(puzzle, puz.solved, puz.children, Search.BreadthFirst)
+answer = Search.GraphSearch(puzzle, puz.solved, puz.children, Search.BreadthFirst)
+if answer[0] == True:
+	print "Solution found:\n"
+	print answer[1]
+else:
+	print "Failed to find answer."

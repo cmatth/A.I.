@@ -24,7 +24,7 @@ def BreadthFirst(root, verifier, children):
 			newChil = children(state)
 	
 			for x in newChil:
-				if x != -1
+				if type(x) is np.ndarray:
 					visited = False
 					for o in Open:
 						if p.compare(x, o):

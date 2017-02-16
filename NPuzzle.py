@@ -37,7 +37,18 @@ def columns(board):
 				solution
 			else:
 				if board[x][y] == 0 or board[x+1][y] == 0:
-					solution
+					##### NEW ####################################
+					thing =  numpy.where(board == 0)
+					if thing[0] == 0 or thing[0] == _size - 1:
+						solution
+					else:
+						if board[x][y] == 0:
+							if board[x-1][y] + 1 != board[x+1][y]:
+								solution = False
+						else:
+							if board[x][y] + 1 != board[x+2][y]:
+									solution = False
+					###############################################
 				else:
 					solution = False
 					break
@@ -51,7 +62,18 @@ def columns(board):
 					solution
 				else:
 					if board[x][y] == 0 or board[x-1][y] == 0:
-						solution
+						##### NEW ####################################
+						thing =  numpy.where(board == 0)
+						if thing[0] == 0 or thing[0] == _size - 1:
+							solution
+						else:
+							if board[x][y] == 0:
+								if board[x+1][y] + 1 != board[x-1][y]:
+									solution = False
+							else:
+								if board[x][y] + 1 != board[x-2][y]:
+										solution = False
+						###############################################
 					else:
 						solution = False
 						break
@@ -210,11 +232,11 @@ def children(board):
 	return childs
 
 def compare(board1, board2):
-	print board1, board2	
 	for x in range(0, _size):
 		for y in range(0, _size):
 			if not board1[x][y] == board2[x][y]:
 				return False
+	return True
 	#########################################################
 			
 		
@@ -286,6 +308,7 @@ if False:
 	show()
 	print "Rows: ", rows(puzzle)
 	print "Columns: ", columns(puzzle)
+	print type(puzzle)
 
 
 
