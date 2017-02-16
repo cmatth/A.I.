@@ -58,7 +58,8 @@ def solved(board):
 		y = np.delete(y, 0)
 
 	return True
-			
+def move(indexOfQueen):
+	board	
 
 ### TESTING ######################################################
 if True:			
