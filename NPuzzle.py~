@@ -4,6 +4,7 @@
 
 import numpy
 import copy
+import math
 
 
 puzzle = 0
@@ -26,7 +27,8 @@ def reset():
 	puzzle = puzzle.reshape(_size, _size)
 
 def show():
-	print puzzle
+	for x in range(0, _size):
+		print puzzle[x]
 
 def columns(board):
 	solution = True
@@ -175,6 +177,8 @@ def adjacency(board):
 
 def solved(board):
 	if adjacency(board) == True or rows(board) == True or columns(board) == True:
+	#if rows(board) == True or columns(board) == True:
+	
 		return True
 	else:
 		return False
@@ -247,10 +251,10 @@ def right(j):
 
 def children(board):
 	childs = []
-	childs.append(copy.deepcopy(move("up", board)))
-	childs.append(copy.deepcopy(move("down", board)))
-	childs.append(copy.deepcopy(move("left", board)))
-	childs.append(copy.deepcopy(move("right", board)))
+	childs.append(move("up", board))
+	childs.append(move("down", board))
+	childs.append(move("left", board))
+	childs.append(move("right", board))
 	return childs
 
 def compare(board1, board2):
@@ -259,6 +263,9 @@ def compare(board1, board2):
 			if not board1[x][y] == board2[x][y]:
 				return False
 	return True
+
+def spaceSize():
+	return float(math.factorial(_size ** 2)) * .0495
 	#########################################################
 			
 		
@@ -276,23 +283,6 @@ if False:
 	print "LEFT:"
 	print move('left', puzzle)
 #########################################################################################
-
-# TESTING SOLUTIONS #####################################################################
-if False:
-	size = 4
-	puzzle = numpy.arange(size*size)
-	puzzle = puzzle.reshape(size,size)
-	print puzzle
-	puz = NPuzzle(4)
-	print puz.solved(puzzle)
-
-	puz = NPuzzle(3)
-	size = 3
-	puzzle = numpy.array([1, 4, 7, 2, 5, 8, 3, 6, 0])
-	puzzle = puzzle.reshape(size,size)
-	print puzzle
-	print puz.solved(puzzle)
-##########################################################################################
 
 # Testing SOLUTION VERIFIERS ##########################################################
 if False:

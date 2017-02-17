@@ -4,6 +4,7 @@
 
 import numpy
 import copy
+import math
 
 
 puzzle = 0
@@ -262,6 +263,9 @@ def compare(board1, board2):
 			if not board1[x][y] == board2[x][y]:
 				return False
 	return True
+
+def spaceSize():
+	return float(math.factorial(_size ** 2)) * .00495
 	#########################################################
 			
 		

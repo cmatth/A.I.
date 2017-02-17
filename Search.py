@@ -5,15 +5,16 @@
 import numpy as np
 import Queue
 import NPuzzle as p
+import nqueens as queens
 import math
 
 #Module Vars
 space = 0
 
-def GraphSearch(config, verify, makeChildren, searchAlgorithm):
-	return searchAlgorithm(config, verify, makeChildren)
+def GraphSearch(config, verify, makeChildren, searchAlgorithm, progresss):
+	return searchAlgorithm(config, verify, makeChildren, progresss)
 
-def BreadthFirst(root, verifier, children):
+def BreadthFirst(root, verifier, children, progresss):
 	Open = [] 
 	solutions = []
 	Open.append(root)
@@ -22,7 +23,8 @@ def BreadthFirst(root, verifier, children):
 	visited = False
 	count = 0 #for progress
 	global space
-	space = float(math.factorial(p._size ** 2))
+	#space = float(math.factorial(p._size ** 2))
+	space = progresss()
 
 	while not len(Open) == 0:
 		state = Open[0]
@@ -55,7 +57,7 @@ def BreadthFirst(root, verifier, children):
 			solutions.append(state)
 	return solutions
 
-def BreadthFirstT(root, verifier, children):
+def BreadthFirstT(root, verifier, children, progresss):
 	Open = []
 	closed   = set([]) 
 	solutions = []
@@ -64,7 +66,8 @@ def BreadthFirstT(root, verifier, children):
 	found = False
 	count = 0 #for progress
 	global space
-	space = float(math.factorial(p._size ** 2))
+	#space = float(math.factorial(p._size ** 2))
+	space = progresss()
 
 	while not len(Open) == 0:
 		#get matrix and tuple representations from Open
@@ -105,7 +108,7 @@ def BreadthFirstT(root, verifier, children):
 				found = False
 	return solutions
 
-def DepthFirstT(root, verifier, children):
+def DepthFirstT(root, verifier, children, progresss):
 	Open = []
 	closed   = set([]) 
 	solutions = []
@@ -113,7 +116,8 @@ def DepthFirstT(root, verifier, children):
 	solution = False
 	found = False
 	global space
-	space = float(math.factorial(p._size ** 2))
+	#space = float(math.factorial(p._size ** 2))
+	space = progresss()
 
 	while not len(Open) == 0:
 		#get matrix and tuple representations from Open
@@ -150,11 +154,63 @@ def DepthFirstT(root, verifier, children):
 				solutions.append(state)
 			else:
 				found = False
+	return solutions
+
+def IterativeDeepening(root, verifier, children, progresss):
+	Open = []
+	closed   = set([]) 
+	solutions = []
+	Open.append(convertBoard(root))
+	solution = False
+	found = False
+	global spaceS
+	space = progresss()
+
+	#deepening structures
+	depthIndices = []
+	depthIndices.append(0)
+	depth = 0
+	
+		while not len(Open) == 0:
+			#get matrix and tuple representations from Open
+			#then remove from open
+			record = Open.pop()
+			state = convertTuple(record)
+
+			#Check if state is a solution
+			solution = verifier(state)
+
+			#Progress
+			Progress(len(closed))
+		
+		
+			if solution == False:
+				if record not in closed:
+					closed.add(record)
+				newChil = children(state)
+	
+				#check if any new children are repeated states
+				for x in newChil:
+					if type(x) is np.ndarray:
+						x = convertBoard(x)
+						if x not in closed:
+							#if x not in Open:
+							Open.append(x)	
+
+			else:
+				for s in solutions:
+					if p.compare(state, s) == True:
+								found = True
+								break
+				if found == False:
+					solutions.append(state)
+				else:
+					found = False
 	return solutions						
 			
 def Progress(count):
-	progress = (count / space) * 202
-	print 'Space Traversed [%d%%]\r'%progress,
+	Ssize = (count / space)
+	print 'Space Traversed [%d%%]\r'%Ssize,
 
 def convertBoard(state):
 			record = state.reshape(len(state[0]) ** 2)

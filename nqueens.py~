@@ -38,9 +38,43 @@ def solved(board):
 		if total != 1 and total != 0:
 			return False
 
-	#check diagonals above main diagonal
+	#check diagonals (left to right
+	x  = np.arange(_size)
+	y  = np.arange(_size)
+	y1 = y[::-1]
+
+	while len(x) > 0:
+		total1 = 0
+		total2 = 0
+		total3 = 0
+		total4 = 0
+		for d in range(0,len(x)):
+			total1 += board[x[d]][y[d]]
+			total2 += board[y[d]][x[d]]
+			total3 += board[x[d]][y1[d]]
+			total4 += board[y1[d]][x[d]]
+		
+		if total1 != 1 and total1 != 0:
+			return False
+
+		if total2 != 1 and total2 != 0:
+			return False
+
+		if total3 != 1 and total3 != 0:
+			return False
+
+		if total4 != 1 and total4 != 0:
+			return False
+
+		x = np.delete(x, -1)
+		y = np.delete(y, 0)
+		y1 = np.delete(y1, 0)
+	return True
+'''
+	#check diagonals (right to left)
 	x = np.arange(_size)
 	y = np.arange(_size)
+	y = y[::-1]
 
 	while len(x) > 0:
 		total1 = 0
@@ -57,8 +91,8 @@ def solved(board):
 
 		x = np.delete(x, -1)
 		y = np.delete(y, 0)
+'''
 
-	return True
 #moves the nth queen once space downward, if possible.
 def move(queenNumber, board):
 	thing =  np.where(board == 1)
@@ -77,10 +111,12 @@ def getChildren(board):
 	childs = []
 	for q in range(1,_size+1):
 		new = move(q,board)
-		if type(x) is np.ndarray:
+		if type(new) is np.ndarray:
 			childs.append(new)
 	return childs
-		
+
+def spaceSize():
+	return float(_size ** _size) * .0099999
 
 ### TESTING ######################################################
 if False:			
@@ -98,14 +134,27 @@ if False:
 	print move(1, board)
 	print move(1, board)
 
-board = np.array([[0, 0, 1, 0], [1,0,0,0], [0,0,0,1], [0,1,0,0]])
-board = board.reshape(4,4)
-print board
-print "***********"
-_size = 4
-chil = getChildren(board)
-for x in range(0, len(chil)):
-	print chil[x]
+if False:
+	board = np.array([[0, 0, 1, 0], [1,0,0,0], [0,0,0,1], [0,1,0,0]])
+	board = board.reshape(4,4)
+	print board
+	print "***********"
+	_size = 4
+	chil = getChildren(board)
+	for x in range(0, len(chil)):
+		print chil[x]
+
+if False:
+	_size = 6
+	puzzle = np.array([[ 0.,  0.,  0.,  0.,  1.,  0.],
+	       [ 0.,  0.,  0.,  1.,  0.,  0.],
+	       [ 0.,  1.,  0.,  0.,  0.,  0.],
+	       [ 1.,  0.,  0.,  0.,  0.,  0.],
+	       [ 0.,  0.,  1.,  0.,  0.,  0.],
+	       [ 0.,  0.,  0.,  0.,  0.,  1.]])
+	print puzzle
+	print solved(puzzle)
+
 
 
 ##################################################################
