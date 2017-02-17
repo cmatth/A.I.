@@ -31,7 +31,7 @@ def BreadthFirst(root, verifier, children):
 
 		#Progress
 		count += 1
-		#Progress(count)
+		Progress(len(closed))
 		
 		if solution == False:
 			closed.append(state)
@@ -40,7 +40,6 @@ def BreadthFirst(root, verifier, children):
 			for x in newChil:
 				if type(x) is np.ndarray:
 					visited = False
-					print "before"
 					for o in Open:
 						if p.compare(x, o):
 							visited = True
@@ -52,10 +51,9 @@ def BreadthFirst(root, verifier, children):
 								break
 					if visited == False:
 						Open.append(x)
-					print "after"
 		else:
-			return [True, state]
-	return [False, 'could not find solution']
+			solutions.append(state)
+	return solutions
 
 def BreadthFirstT(root, verifier, children):
 	Open = []
@@ -63,7 +61,7 @@ def BreadthFirstT(root, verifier, children):
 	solutions = []
 	Open.append(convertBoard(root))
 	solution = False
-	visited = False
+	found = False
 	count = 0 #for progress
 	global space
 	space = float(math.factorial(p._size ** 2))
@@ -84,7 +82,8 @@ def BreadthFirstT(root, verifier, children):
 		
 		
 		if solution == False:
-			closed.add(record)
+			if record not in closed:
+				closed.add(record)
 			newChil = children(state)
 	
 			#check if any new children are repeated states
@@ -92,12 +91,19 @@ def BreadthFirstT(root, verifier, children):
 				if type(x) is np.ndarray:
 					x = convertBoard(x)
 					if x not in closed:
-						if x not in Open:
+						#if x not in Open:
 							Open.append(x)	
 
 		else:
-			return [True, state]
-	return [False, "could not find solution"]
+			for s in solutions:
+				if p.compare(state, s) == True:
+							found = True
+							break
+			if found == False:
+				solutions.append(state)
+			else:
+				found = False
+	return solutions
 
 def DepthFirstT(root, verifier, children):
 	Open = []
@@ -105,8 +111,7 @@ def DepthFirstT(root, verifier, children):
 	solutions = []
 	Open.append(convertBoard(root))
 	solution = False
-	visited = False
-	count = 0 #for progress
+	found = False
 	global space
 	space = float(math.factorial(p._size ** 2))
 
@@ -115,18 +120,17 @@ def DepthFirstT(root, verifier, children):
 		#then remove from open
 		record = Open.pop()
 		state = convertTuple(record)
-		Open.remove(record)
 
 		#Check if state is a solution
 		solution = verifier(state)
 
 		#Progress
-		count += 1
 		Progress(len(closed))
 		
 		
 		if solution == False:
-			closed.add(record)
+			if record not in closed:
+				closed.add(record)
 			newChil = children(state)
 	
 			#check if any new children are repeated states
@@ -134,11 +138,19 @@ def DepthFirstT(root, verifier, children):
 				if type(x) is np.ndarray:
 					x = convertBoard(x)
 					if x not in closed:
-						if x not in Open:
-							Open.append(x)		
+						#if x not in Open:
+						Open.append(x)	
+
 		else:
-			solutions.append(state)
-	return solutions							
+			for s in solutions:
+				if p.compare(state, s) == True:
+							found = True
+							break
+			if found == False:
+				solutions.append(state)
+			else:
+				found = False
+	return solutions						
 			
 def Progress(count):
 	progress = (count / space) * 202
