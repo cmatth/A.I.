@@ -250,10 +250,10 @@ def right(j):
 
 def children(board):
 	childs = []
-	childs.append(copy.deepcopy(move("up", board)))
-	childs.append(copy.deepcopy(move("down", board)))
-	childs.append(copy.deepcopy(move("left", board)))
-	childs.append(copy.deepcopy(move("right", board)))
+	childs.append(move("up", board))
+	childs.append(move("down", board))
+	childs.append(move("left", board))
+	childs.append(move("right", board))
 	return childs
 
 def compare(board1, board2):
