@@ -188,18 +188,20 @@ def solvedNew(board):
     x = np.arange(_size)
     y = np.arange(_size)
     x1 = x[::-1]
+    y1 = y[::-1]
 
     while len(x) > 0:
         total1 = 0
         total2 = 0
         total3 = 0
         total4 = 0
+        #print "::::::::::::"
         for d in range(0, len(x)):
             total1 += board[x[d]][y[d]]
             total2 += board[y[d]][x[d]]
-            total3 += board[x1[d]][y[d]]
-            total4 += board[y[d]][x1[d]]
-
+            total3 += board[x1[d]][y[d]] #ASCENDING DIAGONALS BELOW MAIN
+            total4 += board[y1[d]][x[d]]
+          #  print y1[d], x1[d], x1[d], y[d]
         if total1 != 1 and total1 != 0:
             return False
 
@@ -215,6 +217,7 @@ def solvedNew(board):
         x = np.delete(x, -1)
         y = np.delete(y, 0)
         x1 = np.delete(x1, -1)
+        y1 = np.delete(y1, 0)
     return True
 
 def spaceSizeNew():
@@ -246,15 +249,25 @@ if False:
         print chil[x]
 
 if False:
-    _size = 8
-    puzzle = [[ 1.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.],
-              [ 0.  ,0.  ,1.  ,0.  ,0.  ,0.  ,0.  ,0.],
-              [ 0.  ,0.  ,0.  ,0.  ,0.  ,1.  ,0.  ,0.],
+    _size = 7
+
+    '''
+    puzzle = [[ 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.],
+              [ 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.],
+              [ 0.  ,0.  ,0.  ,0.  ,1.  ,1.  ,0.  ,0.],
               [ 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,1.],
-              [ 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,1.  ,0.],
+              [ 0.  ,0.  ,1.  ,0.  ,0.  ,0.  ,0.  ,0.],
               [ 0.  ,0.  ,0.  ,0.  ,1.  ,0.  ,0.  ,0.],
-              [ 0.  ,0.  ,0.  ,1.  ,0.  ,0.  ,0.  ,0.],
+              [ 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.],
               [ 0.  ,1.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.]]
+    '''
+    puzzle = [[ 0.,  0.,  0.,  0.,  0.,  0.,  1.,],
+              [ 0.,  0.,  0.,  0.,  1.,  0.,  0.],
+              [ 0.,  0.,  0.,  1.,  0.,  0.,  0.],
+              [ 0.,  0.,  1.,  0.,  0.,  0.,  0.],
+              [ 1.,  0.,  0.,  0.,  0.,  0.,  0.],
+              [ 0.,  0.,  0.,  0.,  0.,  1.,  0.],
+              [ 0.,  1.,  0.,  0.,  0.,  0.,  0.]]
 
     print solvedNew(puzzle)
 

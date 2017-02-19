@@ -8,13 +8,14 @@ import NPuzzle as p
 import nqueens as queens
 import math
 import time
+from collections import deque
 
 # Module Vars
 space = 0
 
 
-def GraphSearch(config, verify, makeChildren, searchAlgorithm, progresss, limit):
-    return searchAlgorithm(config, verify, makeChildren, progresss, limit)
+def GraphSearch(config, verify, makeChildren, searchAlgorithm, space_size, limit):
+    return searchAlgorithm(config, verify, makeChildren, space_size, limit)
 
 
 def Progress(count):
@@ -35,22 +36,21 @@ def convertTuple(record):
     return board
 
 
-def BreadthFirstT(root, verifier, children, progresss, depthLimit=0):
-    Open = []
+def BreadthFirstT(root, verifier, children, space_size, depthLimit=0):
+    Open = deque()
     closed = set([])
     solutions = []
     Open.append(convertBoard(root))
     solution = False
     found = False
     global space
-    space = progresss()
+    space = space_size()
 
     while not len(Open) == 0:
         # get matrix and tuple representations from Open
         # then remove from open
-        record = Open[0]
+        record = Open.popleft()
         state = convertTuple(record)
-        Open.remove(record)
 
         # Check if state is a solution
         solution = verifier(state)
@@ -83,15 +83,15 @@ def BreadthFirstT(root, verifier, children, progresss, depthLimit=0):
     return solutions
 
 
-def DepthFirstT(root, verifier, children, progresss, depthLimit=0):
-    Open = []
+def DepthFirstT(root, verifier, children, space_size, depthLimit=0):
+    Open = deque()
     closed = set([])
     solutions = []
     Open.append(convertBoard(root))
     solution = False
     found = False
     global space
-    space = progresss()
+    space = space_size()
 
     while not len(Open) == 0:
         # get matrix and tuple representations from Open
@@ -130,7 +130,7 @@ def DepthFirstT(root, verifier, children, progresss, depthLimit=0):
     return solutions
 
 
-def IterativeDeepening(root, verifier, children, progresss, depthLimit=0):
+def IterativeDeepening(root, verifier, children, space_size, depthLimit=0):
     depth = 0
     solutions = []
 
@@ -141,7 +141,7 @@ def IterativeDeepening(root, verifier, children, progresss, depthLimit=0):
         solution = False
         found = False
         global space
-        space = progresss()
+        space = space_size()
 
         # deepening structures
         depthIndices = []
@@ -192,7 +192,7 @@ def IterativeDeepening(root, verifier, children, progresss, depthLimit=0):
     return solutions
 
 
-def BiDirectional(root, verifier, children, progresss, goal):
+def BiDirectional(root, verifier, children, space_size, goal):
     Open = []
     GOpen = []
     closed = set([])
@@ -204,7 +204,7 @@ def BiDirectional(root, verifier, children, progresss, goal):
 
     global space
     # space = float(math.factorial(p._size ** 2))
-    space = progresss()
+    space = space_size()
 
     while not len(Open) == 0:
         # get matrix and tuple representations from Open
@@ -254,7 +254,7 @@ def BiDirectional(root, verifier, children, progresss, goal):
     return "The goal state is not reachable from every start configuration. Couldn't find."
 
 
-def QBiDirectional(root, verifier, children, progresss, goal):
+def QBiDirectional(root, verifier, children, space_size, goal):
     Open = []
     GOpen = []
     closed = set([])
@@ -266,7 +266,7 @@ def QBiDirectional(root, verifier, children, progresss, goal):
 
     global space
     # space = float(math.factorial(p._size ** 2))
-    space = progresss()
+    space = space_size()
 
     while not len(Open) == 0:
         # get matrix and tuple representations from Open
