@@ -9,3 +9,9 @@ Seconds: 239
 
 Nqueens(7): 195 seconds
 
+
+Iterative Puzzle(4): 516 seconds, no solutions
+
+Bidirectional Puzzle(3): whole space in 87 seconds
+Breadth First PUzzle(3): whole space in 77 seconds
+
