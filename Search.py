@@ -183,7 +183,8 @@ def IterativeDeepening(root, verifier, children, space_size, depthLimit=0):
                 for s in solutions:
                     if p.compare(state, s) == True:
                         found = True
-                        break
+                        #
+                        # break
                 if found == False:
                     solutions.append(state)
                 else:

@@ -148,7 +148,7 @@ def goalState():
                          [0., 0., 1., 0.]])
 
 #### New implementation ##################################
-def new_board(size):
+def getInitialState(size):
     global _size
     _size = size
     return np.zeros(_size ** 2).reshape(size, size)
