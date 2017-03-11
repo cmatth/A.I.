@@ -8,6 +8,8 @@ import nqueens
 import graph
 import Search
 import copy
+import time
+import operator
 
 
 
@@ -19,17 +21,31 @@ class State:
 	
 	@staticmethod
 	def children(self):
+		best = self
 		childlist = []
+		better = []
+		same = []
 		for x in range(0,_size):
 			childseed = copy.deepcopy(self.seed)
 			childseed[x] = np.random.randint(0,_size,1)
 			childlist.append(State(childseed))
 		
 		for x in childlist:
-			if x.score < self.score:
+			if x.score < best.score:
 				best = x
-		if best:
-			return best
+			if x.score < self.score:
+				better.append(x)
+			elif x.score == self.score:
+				same.append(x)
+
+		if len(better) > 0:
+			randy = np.random.randint(0,len(better),1)
+			return better[randy]
+		elif len(same) > 0:
+			randy = np.random.randint(0,len(same),1)
+			return same[randy]
+		else:
+			return self
 		
 			
 
@@ -38,6 +54,7 @@ class State:
 def queensEval1(board):
 
 	score = 0
+	firstpass = True
 
     # check diagonals (left to right
 	x = np.arange(_size)
@@ -60,13 +77,13 @@ def queensEval1(board):
 		if total1 != 0:
 			score += total1 - 1
 
-		if total2 != 0:
+		if total2 != 0 and firstpass == False:
 			score += total2 - 1
 
 		if total3 != 0:
 			score += total3 - 1
 
-		if total4 != 0:
+		if total4 != 0 and firstpass == False:
 			score += total4 - 1
 
 		x = np.delete(x, -1)
@@ -74,15 +91,88 @@ def queensEval1(board):
 		x1 = np.delete(x1, -1)
 		y1 = np.delete(y1, 0)
 
+		firstpass = False
+
+	#print "diagonal score: ", score
+
 	# check sum of all rows
+	
 	for x in range(0, _size):
 		total = 0
 		for y in range(0, _size):
 			total += board[x][y]
 
-			if total != 0:
-				score += total - 1
+		if total != 0:
+			score += total - 1
 
+	# check sum of all columns
+	
+	for x in range(0, _size):
+		total = 0
+		for y in range(0, _size):
+			total += board[y][x]
+
+		if total != 0:
+			score += total - 1
+	
+	#print "row score: ", score
+	return score
+
+def queensEval2(board):
+
+	score = 0
+	firstpass = True
+
+    # check diagonals (left to right
+	x = np.arange(_size)
+	y = np.arange(_size)
+	x1 = x[::-1]
+	y1 = y[::-1]
+
+	while len(x) > 0:
+		total1 = 0
+		total2 = 0
+		total3 = 0
+		total4 = 0
+
+		for d in range(0, len(x)):
+			total1 += board[x[d]][y[d]]
+			total2 += board[y[d]][x[d]]
+			total3 += board[x1[d]][y[d]] #ASCENDING DIAGONALS BELOW MAIN
+			total4 += board[y1[d]][x[d]]
+
+		if total1 != 0:
+			score += total1 - 1
+
+		if total2 != 0 and firstpass == False:
+			score += total2 - 1
+
+		if total3 != 0:
+			score += total3 - 1
+
+		if total4 != 0 and firstpass == False:
+			score += total4 - 1
+
+		x = np.delete(x, -1)
+		y = np.delete(y, 0)
+		x1 = np.delete(x1, -1)
+		y1 = np.delete(y1, 0)
+
+		firstpass = False
+
+	#print "diagonal score: ", score
+
+	# check sum of all rows
+	
+	for x in range(0, _size):
+		total = 0
+		for y in range(0, _size):
+			total += board[x][y]
+
+		if total != 0:
+			score += total - 1
+	
+	#print "row score: ", score
 	return score
 
 def makeState(seed):
@@ -93,15 +183,114 @@ def makeState(seed):
 
 	return state
 
-#board = [[ 0,  0,  1,  0],[ 1,  0,  0,  0],[ 0, 0,  0,  1],[ 0,  1,  0,  0]]
-#print queensEval1(board)
-_size = 4
-_currentScore = None
-seed = np.random.randint(0, _size, _size)
-start = State(seed)
-print start.board, start.score
-next = State.children(start)
-print next.board, next.score
+def replenishPop(pop):
+	size = len(pop) - 2
+	
+	x = 0
+	while x < size:
+		mother = pop[x]
+		father = pop[x+1]
+		childs = breed(mother, father)
+		for y in childs:
+			pop.append(y)
+		x += 2
+	return pop
+
+def breed(p1,p2):
+	crossover = np.random.randint(0, _size, 1)
+	childseed1 = copy.copy(p1.seed)
+	childseed2 = copy.copy(p2.seed)
+	for x in range(crossover, _size):
+		childseed1[x] = p2.seed[x]
+		childseed2[x] = p1.seed[x]
+
+	#roll for mutation
+	if np.random.randint(1, 100, 1) > 65:
+		gene1 = np.random.randint(0, _size, 1)
+		gene2 = np.random.randint(0, _size, 1)
+		childseed1[gene1] = gene2
+
+	#roll for mutation
+	if np.random.randint(1, 100, 1) > 65:
+		gene1 = np.random.randint(0, _size, 1)
+		gene2 = np.random.randint(0, _size, 1)
+		childseed2[gene1] = gene2
+	return State(childseed1), State(childseed2)
+	
+	
+
+### HILL CLIMBING #############################################################
+'''
+for _size in range(4,30):
+	#_size = 25
+	_currentScore = None
+	seed = np.random.randint(0, _size, _size)
+	current = State(seed)
+	print current.board, current.score
+	restarts = 0
+	start = time.time()
+	while current.score != 0 and restarts < 30:
+		next = State.children(current)
+		if next != None:
+			print next.board, next.score
+			current = next
+		else:
+			restarts += 1
+			print "Restarting", restarts
+			current = State(np.random.randint(0, _size, _size))
+
+	if current.score == 0:
+		stop = time.time()
+		print "Solved:"
+		print current.board
+		print "Time taken: %d sec" %(stop - start)
+	else:
+		print "Failed"
+
+#size 30 took 43sec
+'''
+### GENETIC ###################################################################
+# pop size = 30
+# kill rate = 1/3
+# mutation rate = 1/3
+
+#start pop
+_size = 5
+popSize = 40
+population = [] 
+for x in range(0,popSize):
+	population.append(State(np.random.randint(0, _size, _size)))
+
+run = True
+while(run):
+	#sort population by fitness
+	population = sorted(population, key=operator.attrgetter("score"), reverse=False)
+	
+	popscore = 0
+	for x in population:
+		#print x.board, x.score
+		popscore += x.score
+	print popscore
+
+	#raw_input('What is your name?')
+
+	if population[0].score == 0:
+		run = False
+		print "Solved"
+		print population[0].board, population[0].score
+
+	#kill off weaker half
+	population = population[:(popSize / 2)]
+	#print len(population)
+
+	#breed survivors
+	population = replenishPop(population)
+	
+	newPopScore = 0
+	for x in population:
+		newPopScore += x.score
+
+
 
 
 
