@@ -2,6 +2,7 @@ import numpy as np
 import copy
 import operator
 import random
+import time
 
 class State:
 	def __init__(self, seed):
@@ -102,13 +103,15 @@ def repair(seed):
 				break
 	return seed
 
-popSize = 120
-_size = 25
+popSize = 150
+_size = 100
+maxGenerations = 400
 
 pop1 = []
 pop  = []
 
-run = True
+run = False
+start = time.time()
 while(run):
 	for x in range(0,popSize):
 		pop1.append(np.arange(0,_size))
@@ -120,24 +123,28 @@ while(run):
 
 	generation = 0
 	raw_input("Restarting")
-	while(run and generation <= 200):
+	while(run and generation <= maxGenerations):
 		popscore = 0
 
 		if pop[0].score == 0:
+			stop = time.time()
 			run = False
 			print "Solved"
 			print pop[0].seed, pop[0].score
+			print "Time Taken: %d sec" %(stop - start)
 			break
 
 		#kill off weaker half
 		#pop = pop[:(popSize / 2)]
 		#print len(population)
-		
+
+		'''
 		print "original*************************"
 		for x in pop:
 			print x.seed, x.score,':', len(x.seed) - len(np.unique(x.seed))
 			popscore += x.score
-		print "gen: %d" %generation, " score: %d" %popscore
+		'''
+		print "gen: %d" %generation
 
 		#breed population randomly
 		random.shuffle(pop)
@@ -149,4 +156,11 @@ while(run):
 		pop = pop[:popSize]
 		generation += 1
 
+
+chr =  State([66, 39, 73, 55, 64, 72, 21, 75, 20, 90, 27, 97, 45,  6, 57,  5, 38, 89, 77, 46, 84, 82, 52, 71, 78,
+		 10, 36, 18, 22, 24, 87, 76, 53, 34, 14,  8, 13, 61, 67, 58, 29, 11, 28, 98, 79, 92, 50, 43, 94, 23,
+		 63, 95,  4, 35, 74, 81, 62, 91, 99, 56,  0, 25, 60, 47, 96, 16, 26,  9, 70, 31, 88,  7, 19, 41, 15,
+		 12, 85,  2, 33, 48, 59, 44,  1, 86, 17, 93, 30, 32, 80, 37,  3, 40, 42, 54, 69, 49, 83, 68, 51, 65] )
+
+makeState(chr.seed)
 
