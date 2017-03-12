@@ -33,6 +33,7 @@ def makeState(seed):
 	print state
 
 def replenishPop(pop):
+	#raw_input("breeding")
 	size = len(pop) - 2
 	
 	x = 0
@@ -45,10 +46,9 @@ def replenishPop(pop):
 		x += 2
 	return pop
 
-def diversify(state)
 
 def breed(p1,p2):
-	mutRate = 70
+	mutRate = 30
 	crossover = np.random.randint(0, _size, 1)
 	childseed1 = copy.copy(p1.seed)
 	childseed2 = copy.copy(p2.seed)
@@ -72,10 +72,38 @@ def breed(p1,p2):
 		childseed2[gene1] = childseed2[gene2]
 		childseed2[gene2] = tmp
 
+	if len(childseed1) > len(np.unique(childseed1)):
+		#print "repairing", childseed1
+		
+		childseed1 = repair(childseed1)
+
+		#print "repaired:", childseed1
+		#raw_input("ENTER")
+
+	if len(childseed2) > len(np.unique(childseed2)):
+		childseed2 = repair(childseed2)
+
 	return State(childseed1), State(childseed2)
 
-popSize = 30
-_size = 10
+def repair(seed):
+	a = np.arange(0,_size)
+	for x in seed:
+		index = np.argwhere(a==x)
+		a = np.delete(a,index)
+	#print a
+	if len(a) > 0:
+		for y in range(0,_size):
+			indices = [i for i, x in enumerate(seed) if x == y]
+			if len(indices) > 1:
+				num = np.random.randint(0,len(indices))
+				seed[indices[num]] = a[0]
+				np.delete(a,0)
+			if len(a) == 0:
+				break
+	return seed
+
+popSize = 120
+_size = 25
 
 pop1 = []
 pop  = []
@@ -91,11 +119,9 @@ while(run):
 
 
 	generation = 0
-	while(run and generation < 50):	
+	raw_input("Restarting")
+	while(run and generation <= 200):
 		popscore = 0
-
-
-		#raw_input('Press ENTER to continue')
 
 		if pop[0].score == 0:
 			run = False
@@ -107,36 +133,20 @@ while(run):
 		#pop = pop[:(popSize / 2)]
 		#print len(population)
 		
-		print "original"
+		print "original*************************"
 		for x in pop:
-			print x.seed, x.score
+			print x.seed, x.score,':', len(x.seed) - len(np.unique(x.seed))
 			popscore += x.score
-		print popscore
+		print "gen: %d" %generation, " score: %d" %popscore
 
 		#breed population randomly
 		random.shuffle(pop)
-
-		print "breeders"
-		for x in pop:
-			print x.seed, x.score
-			popscore += x.score
-		print popscore
-		
 		pop = replenishPop(pop)
-
 		
 		#reduce pop to original size
 		pop = sorted(pop, key=operator.attrgetter("score"), reverse=False)
 
-		print "before cull"
-		for x in pop:
-			print x.seed, x.score
-			popscore += x.score
-		print popscore
-
 		pop = pop[:popSize]
-
-		#raw_input('Press ENTER to continue')
-	print "Random restart"
+		generation += 1
 
 

@@ -215,7 +215,11 @@ def breed(p1,p2):
 		gene1 = np.random.randint(0, _size, 1)
 		gene2 = np.random.randint(0, _size, 1)
 		childseed2[gene1] = gene2
+
+
 	return State(childseed1), State(childseed2)
+				
+		
 	
 	
 
