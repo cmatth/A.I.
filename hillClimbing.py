@@ -64,7 +64,7 @@ print "Starting State:"
 print current.seed, ": %d" %(current.score)
 start = time.time()
 while current.score != 0 and restarts < 30:
-	next = State.children(current)
+	next = State.children(current, 2)
 	if next != None:
 		print next.board, next.score
 		current = next
