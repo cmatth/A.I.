@@ -54,7 +54,7 @@ class State:
 			return self
 
 ### HILL CLIMBING ################################################
-_size = 100
+_size = 20
 _currentScore = None
 restarts = 0
 current = State(np.random.randint(0, _size, _size))

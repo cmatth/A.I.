@@ -104,7 +104,7 @@ def repair(seed):
 	return seed
 
 popSize = 150
-_size = 25
+_size = 20
 maxGenerations = 400
 
 pop1 = []
