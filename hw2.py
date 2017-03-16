@@ -224,78 +224,31 @@ def breed(p1,p2):
 	
 
 ### HILL CLIMBING #############################################################
-'''
-for _size in range(4,30):
-	#_size = 25
-	_currentScore = None
-	seed = np.random.randint(0, _size, _size)
-	current = State(seed)
-	print current.board, current.score
-	restarts = 0
-	start = time.time()
-	while current.score != 0 and restarts < 30:
-		next = State.children(current)
-		if next != None:
-			print next.board, next.score
-			current = next
-		else:
-			restarts += 1
-			print "Restarting", restarts
-			current = State(np.random.randint(0, _size, _size))
 
-	if current.score == 0:
-		stop = time.time()
-		print "Solved:"
-		print current.board
-		print "Time taken: %d sec" %(stop - start)
+_size = 25
+_currentScore = None
+seed = np.random.randint(0, _size, _size)
+current = State(seed)
+print current.board, current.score
+restarts = 0
+start = time.time()
+while current.score != 0 and restarts < 30:
+	next = State.children(current)
+	if next != None:
+		print next.board, next.score
+		current = next
 	else:
-		print "Failed"
+		restarts += 1
+		print "Restarting", restarts
+		current = State(np.random.randint(0, _size, _size))
 
-#size 30 took 43sec
-'''
-### GENETIC ###################################################################
-# pop size = 30
-# kill rate = 1/3
-# mutation rate = 1/3
-
-#start pop
-_size = 5
-popSize = 40
-population = [] 
-for x in range(0,popSize):
-	population.append(State(np.random.randint(0, _size, _size)))
-
-run = True
-while(run):
-	#sort population by fitness
-	population = sorted(population, key=operator.attrgetter("score"), reverse=False)
-	
-	popscore = 0
-	for x in population:
-		#print x.board, x.score
-		popscore += x.score
-	print popscore
-
-	#raw_input('What is your name?')
-
-	if population[0].score == 0:
-		run = False
-		print "Solved"
-		print population[0].board, population[0].score
-
-	#kill off weaker half
-	population = population[:(popSize / 2)]
-	#print len(population)
-
-	#breed survivors
-	population = replenishPop(population)
-	
-	newPopScore = 0
-	for x in population:
-		newPopScore += x.score
-
-
-
+if current.score == 0:
+	stop = time.time()
+	print "Solved:"
+	print current.board
+	print "Time taken: %d sec" %(stop - start)
+else:
+	print "Failed"
 
 
 

@@ -104,13 +104,13 @@ def repair(seed):
 	return seed
 
 popSize = 150
-_size = 100
+_size = 10
 maxGenerations = 400
 
 pop1 = []
 pop  = []
 
-run = False
+run = True
 start = time.time()
 while(run):
 	for x in range(0,popSize):
@@ -162,5 +162,5 @@ chr =  State([66, 39, 73, 55, 64, 72, 21, 75, 20, 90, 27, 97, 45,  6, 57,  5, 38
 		 63, 95,  4, 35, 74, 81, 62, 91, 99, 56,  0, 25, 60, 47, 96, 16, 26,  9, 70, 31, 88,  7, 19, 41, 15,
 		 12, 85,  2, 33, 48, 59, 44,  1, 86, 17, 93, 30, 32, 80, 37,  3, 40, 42, 54, 69, 49, 83, 68, 51, 65] )
 
-makeState(chr.seed)
+#makeState(chr.seed)
 
