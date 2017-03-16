@@ -1,18 +1,16 @@
 import numpy as np
 import copy
-import operator
-import random
 import time
 
 class State:
 	def __init__(self, seed):
 		self.seed  = seed
-		self.score = self.evaluate(seed)
+		self.score = self.evaluate()
 
 
-	def evaluate(seed):
+	def evaluate(self):
 		clashes = 0
-		row_col_clashes = abs(_size - len(np.unique(seed)))
+		row_col_clashes = abs(_size - len(np.unique(self.seed)))
 		clashes += row_col_clashes
 
 		# calculate diagonal clashes
@@ -20,7 +18,7 @@ class State:
 			for j in range(_size):
 				if ( i != j):
 					dx = abs(i-j)
-					dy = abs(seed[i] - seed[j])
+					dy = abs(self.seed[i] - self.seed[j])
 					if(dx == dy):
 						clashes += 1
 		return clashes
@@ -56,7 +54,7 @@ class State:
 			return self
 
 ### HILL CLIMBING ################################################
-_size = 25
+_size = 100
 _currentScore = None
 restarts = 0
 current = State(np.random.randint(0, _size, _size))
@@ -66,7 +64,7 @@ start = time.time()
 while current.score != 0 and restarts < 30:
 	next = State.children(current, 2)
 	if next != None:
-		print next.board, next.score
+		print next.seed,": %d" %(next.score)
 		current = next
 	else:
 		restarts += 1
@@ -76,7 +74,7 @@ while current.score != 0 and restarts < 30:
 if current.score == 0:
 	stop = time.time()
 	print "Solved:"
-	print current.board
+	print current.seed
 	print "Time taken: %d sec" %(stop - start)
 else:
 	print "Failed"

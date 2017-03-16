@@ -104,7 +104,7 @@ def repair(seed):
 	return seed
 
 popSize = 150
-_size = 10
+_size = 25
 maxGenerations = 400
 
 pop1 = []
@@ -120,9 +120,8 @@ while(run):
 		random.shuffle(x)
 		pop.append(State(x))
 
-
 	generation = 0
-	raw_input("Restarting")
+
 	while(run and generation <= maxGenerations):
 		popscore = 0
 
@@ -134,16 +133,6 @@ while(run):
 			print "Time Taken: %d sec" %(stop - start)
 			break
 
-		#kill off weaker half
-		#pop = pop[:(popSize / 2)]
-		#print len(population)
-
-		'''
-		print "original*************************"
-		for x in pop:
-			print x.seed, x.score,':', len(x.seed) - len(np.unique(x.seed))
-			popscore += x.score
-		'''
 		print "gen: %d" %generation
 
 		#breed population randomly
