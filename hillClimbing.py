@@ -54,7 +54,7 @@ class State:
 			return self
 
 ### HILL CLIMBING ################################################
-_size = 20
+_size = 100
 _currentScore = None
 restarts = 0
 current = State(np.random.randint(0, _size, _size))
@@ -78,3 +78,6 @@ if current.score == 0:
 	print "Time taken: %d sec" %(stop - start)
 else:
 	print "Failed"
+
+#took 372 seconds
+#took 706 seconds
